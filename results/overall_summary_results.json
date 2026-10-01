@@ -1,0 +1,38 @@
+{
+  "baseline_mean": {
+    "accuracy": 98.0,
+    "precision": 97.06,
+    "recall": 99.0,
+    "f1_score": 98.02,
+    "attack_packets_served_percent": 5.0,
+    "legitimate_packet_loss_percent": 42.0,
+    "network_load_percent": 10.233333333333334,
+    "avg_rtt_ms": 94.33333333333333,
+    "throughput_mbps": 10.233333333333334,
+    "mitigation_response_time_sec": 0.045,
+    "composite_score": 48.35666666666667,
+    "legit_generated": 17666.666666666668,
+    "legit_dropped": 7420.0,
+    "attack_generated": 158333.33333333334,
+    "attack_served": 7916.666666666667,
+    "duration": 10.0
+  },
+  "adaptive_mean": {
+    "accuracy": 98.0,
+    "precision": 98.98,
+    "recall": 97.0,
+    "f1_score": 97.98,
+    "attack_packets_served_percent": 6.333333333333333,
+    "legitimate_packet_loss_percent": 4.333333333333333,
+    "network_load_percent": 8.673333333333334,
+    "avg_rtt_ms": 16.666666666666668,
+    "throughput_mbps": 8.673333333333334,
+    "mitigation_response_time_sec": 0.0,
+    "composite_score": 68.93333333333334,
+    "legit_generated": 17666.666666666668,
+    "legit_dropped": 790.0,
+    "attack_generated": 158333.33333333334,
+    "attack_served": 4016.6666666666665,
+    "duration": 10.0
+  }
+}
