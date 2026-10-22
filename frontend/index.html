@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-Based Adaptive DDoS Mitigation in SDN | Research Dashboard</title>
+  <meta name="description" content="Research dashboard for AI-Based Adaptive DDoS Mitigation in Software Defined Networks. Compare baseline vs adaptive strategies in real-time." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Animated Background Particles -->
+<div class="bg-grid"></div>
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- Top Navigation -->
+<nav class="navbar">
+  <div class="nav-brand">
+    <div class="nav-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    </div>
+    <span>AdaptiveSDN</span>
+  </div>
+  <div class="nav-links">
+    <a href="#overview" class="nav-link active">Overview</a>
+    <a href="#live-monitor" class="nav-link">Live Monitor</a>
+    <a href="#comparison" class="nav-link">Comparison</a>
+    <a href="#decision-engine" class="nav-link">Decision Engine</a>
+    <a href="#architecture" class="nav-link">Architecture</a>
+  </div>
+  <div class="nav-status">
+    <span class="status-dot"></span>
+    <span>System Active</span>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero" id="overview">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Research Project · SDN Security · AI/ML
+    </div>
+    <h1 class="hero-title">
+      AI-Based Adaptive DDoS<br/>
+      <span class="gradient-text">Mitigation in SDN</span>
+    </h1>
+    <p class="hero-subtitle">
+      Dynamically selects optimal mitigation strategies — Dynamic Blocking, Rate Limiting, or Safe Inspection — based on real-time attack intensity, network congestion, and ML classification confidence.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="startSimulation()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="5,3 19,12 5,21"/>
+        </svg>
+        Run Simulation
+      </button>
+      <button class="btn-secondary" onclick="scrollTo('comparison')">
+        View Results
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 17l9.2-9.2M17 17V7H7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card" data-value="37.67" data-suffix="%" data-label="Legitimate Traffic Preservation Gain">
+      <div class="stat-value"><span class="counter">37.67</span>%</div>
+      <div class="stat-label">Less Legitimate Packet Loss</div>
+      <div class="stat-sub">vs. Baseline Aggressive Blocking</div>
+    </div>
+    <div class="stat-card" data-value="77.67" data-suffix="ms" data-label="RTT Latency Reduction">
+      <div class="stat-value"><span class="counter">77.67</span><small>ms</small></div>
+      <div class="stat-label">RTT Latency Reduction</div>
+      <div class="stat-sub">Avg across all attack scenarios</div>
+    </div>
+    <div class="stat-card" data-value="20.57" data-suffix="pts" data-label="Adaptive Performance Score Gain">
+      <div class="stat-value">+<span class="counter">20.57</span></div>
+      <div class="stat-label">Composite Score Gain</div>
+      <div class="stat-sub">Adaptive vs. Baseline trade-off</div>
+    </div>
+    <div class="stat-card" data-value="98.02" data-suffix="%" data-label="Detection F1 Score">
+      <div class="stat-value"><span class="counter">98.02</span>%</div>
+      <div class="stat-label">RF Detection F1-Score</div>
+      <div class="stat-sub">Random Forest DDoS Classifier</div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Monitor Section -->
+<section class="section" id="live-monitor">
+  <div class="section-header">
+    <h2 class="section-title">Live Network Monitor</h2>
+    <p class="section-desc">Real-time simulation of SDN traffic telemetry with adaptive mitigation decision engine</p>
+  </div>
+
+  <div class="monitor-controls">
+    <div class="control-group">
+      <label>Attack Type</label>
+      <div class="btn-group" id="attackTypeGroup">
+        <button class="btn-toggle active" data-value="udp">UDP Flood</button>
+        <button class="btn-toggle" data-value="syn">TCP SYN</button>
+        <button class="btn-toggle" data-value="icmp">ICMP Flood</button>
+      </div>
+    </div>
+    <div class="control-group">
+      <label>Severity Level</label>
+      <div class="btn-group" id="severityGroup">
+        <button class="btn-toggle sev-low" data-value="low">Low</button>
+        <button class="btn-toggle sev-med active" data-value="medium">Medium</button>
+        <button class="btn-toggle sev-high" data-value="high">High</button>
+      </div>
+    </div>
+    <div class="control-group">
+      <label>Mode</label>
+      <div class="mode-switch">
+        <button class="mode-btn" id="modeBaseline" onclick="setMode('baseline')">Baseline</button>
+        <button class="mode-btn active" id="modeAdaptive" onclick="setMode('adaptive')">Adaptive</button>
+      </div>
+    </div>
+    <button class="btn-primary" id="simBtn" onclick="startSimulation()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+      Start
+    </button>
+  </div>
+
+  <!-- Decision Engine Status -->
+  <div class="decision-banner" id="decisionBanner">
+    <div class="decision-status">
+      <div class="decision-icon" id="decisionIcon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="decision-title" id="decisionTitle">Monitoring Traffic…</div>
+        <div class="decision-reason" id="decisionReason">Run simulation to see adaptive decision logic</div>
+      </div>
+    </div>
+    <div class="decision-strategy" id="decisionStrategy">
+      <span class="strategy-badge" id="strategyBadge">NO ACTION</span>
+    </div>
+  </div>
+
+  <!-- Real-time Metrics Grid -->
+  <div class="metrics-grid">
+    <div class="metric-card live">
+      <div class="metric-icon blue">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="metric-value" id="ppsVal">0</div>
+      <div class="metric-label">Packet Rate (pps)</div>
+      <div class="metric-bar"><div class="metric-bar-fill blue" id="ppsBar" style="width:0%"></div></div>
+    </div>
+    <div class="metric-card live">
+      <div class="metric-icon red">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+      </div>
+      <div class="metric-value" id="netLoadVal">0%</div>
+      <div class="metric-label">Network Load</div>
+      <div class="metric-bar"><div class="metric-bar-fill red" id="netLoadBar" style="width:0%"></div></div>
+    </div>
+    <div class="metric-card live">
+      <div class="metric-icon green">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="metric-value" id="legitLossVal">0%</div>
+      <div class="metric-label">Legitimate Packet Loss</div>
+      <div class="metric-bar"><div class="metric-bar-fill green" id="legitLossBar" style="width:0%"></div></div>
+    </div>
+    <div class="metric-card live">
+      <div class="metric-icon purple">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="metric-value" id="rttVal">0 ms</div>
+      <div class="metric-label">Avg RTT / Latency</div>
+      <div class="metric-bar"><div class="metric-bar-fill purple" id="rttBar" style="width:0%"></div></div>
+    </div>
+    <div class="metric-card live">
+      <div class="metric-icon orange">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <div class="metric-value" id="attackServedVal">0%</div>
+      <div class="metric-label">Attack Packets Served</div>
+      <div class="metric-bar"><div class="metric-bar-fill orange" id="attackServedBar" style="width:0%"></div></div>
+    </div>
+    <div class="metric-card live">
+      <div class="metric-icon teal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <div class="metric-value" id="scoreVal">0</div>
+      <div class="metric-label">Adaptive Score / 100</div>
+      <div class="metric-bar"><div class="metric-bar-fill teal" id="scoreBar" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Live Chart -->
+  <div class="chart-container">
+    <div class="chart-header">
+      <h3>Real-time Traffic Timeline</h3>
+      <div class="chart-legend">
+        <span class="legend-item"><span class="legend-dot red"></span>Attack Traffic (pps)</span>
+        <span class="legend-item"><span class="legend-dot green"></span>Legitimate Traffic (pps)</span>
+        <span class="legend-item"><span class="legend-dot blue"></span>RTT (ms)</span>
+      </div>
+    </div>
+    <canvas id="liveChart" height="90"></canvas>
+  </div>
+</section>
+
+<!-- Comparison Section -->
+<section class="section" id="comparison">
+  <div class="section-header">
+    <h2 class="section-title">Baseline vs. Adaptive System</h2>
+    <p class="section-desc">Empirical evaluation across UDP, SYN, and ICMP floods at Low, Medium, and High severity levels</p>
+  </div>
+
+  <!-- Filter Controls -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>Attack Type</label>
+      <select id="filterAttack" onchange="updateComparison()">
+        <option value="all">All Attacks</option>
+        <option value="udp">UDP Flood</option>
+        <option value="syn">TCP SYN</option>
+        <option value="icmp">ICMP Flood</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Severity</label>
+      <select id="filterSeverity" onchange="updateComparison()">
+        <option value="all">All Severities</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Research Table -->
+  <div class="table-container">
+    <table class="results-table" id="resultsTable">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Baseline System</th>
+          <th>Adaptive System</th>
+          <th>Improvement</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="resultsTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Comparison Charts -->
+  <div class="charts-row">
+    <div class="chart-box">
+      <h3>Legitimate Packet Loss (%)</h3>
+      <canvas id="lossChart" height="200"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Attack Packets Served (%)</h3>
+      <canvas id="attackChart" height="200"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Average RTT / Latency (ms)</h3>
+      <canvas id="rttChart" height="200"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Adaptive Performance Score</h3>
+      <canvas id="scoreChart" height="200"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- Decision Engine Section -->
+<section class="section" id="decision-engine">
+  <div class="section-header">
+    <h2 class="section-title">Adaptive Decision Engine</h2>
+    <p class="section-desc">Interactive simulation of the rule-based adaptive selector logic</p>
+  </div>
+
+  <div class="decision-simulator">
+    <div class="sim-inputs">
+      <h3>Configure Telemetry Input</h3>
+      <div class="slider-group">
+        <label>Classification Confidence: <span id="confVal">0.95</span></label>
+        <input type="range" min="0" max="1" step="0.01" value="0.95" id="confSlider" oninput="updateDecision()">
+      </div>
+      <div class="slider-group">
+        <label>Packet Rate (pps): <span id="ppsSliderVal">18,500</span></label>
+        <input type="range" min="0" max="50000" step="500" value="18500" id="ppsSlider" oninput="updateDecision()">
+      </div>
+      <div class="slider-group">
+        <label>Network Load (%): <span id="loadVal">82</span>%</label>
+        <input type="range" min="0" max="100" step="1" value="82" id="loadSlider" oninput="updateDecision()">
+      </div>
+      <div class="slider-group">
+        <label>Legitimate Traffic Rate (pps): <span id="legitVal">1,200</span></label>
+        <input type="range" min="0" max="10000" step="100" value="1200" id="legitSlider" oninput="updateDecision()">
+      </div>
+      <div class="slider-group">
+        <label>Attack Detected: <span id="attackDetectedLabel">Yes</span></label>
+        <input type="range" min="0" max="1" step="1" value="1" id="attackSlider" oninput="updateDecision()">
+      </div>
+    </div>
+
+    <div class="decision-output">
+      <div class="decision-result-header">Decision Engine Output</div>
+      <div class="decision-result-card" id="decisionResultCard">
+        <div class="dr-strategy" id="drStrategy">DYNAMIC_BLOCKING</div>
+        <div class="dr-reason" id="drReason">High attack confidence with severe intensity and network congestion.</div>
+        <div class="dr-metrics">
+          <div class="dr-metric">
+            <span class="dr-label">Confidence</span>
+            <span class="dr-bar-wrap"><span class="dr-bar-fill" id="drConfBar" style="width:95%"></span></span>
+            <span id="drConfText">95%</span>
+          </div>
+          <div class="dr-metric">
+            <span class="dr-label">Packet Rate</span>
+            <span class="dr-bar-wrap"><span class="dr-bar-fill orange" id="drPpsBar" style="width:37%"></span></span>
+            <span id="drPpsText">18,500 pps</span>
+          </div>
+          <div class="dr-metric">
+            <span class="dr-label">Net Load</span>
+            <span class="dr-bar-wrap"><span class="dr-bar-fill red" id="drLoadBar" style="width:82%"></span></span>
+            <span id="drLoadText">82%</span>
+          </div>
+        </div>
+        <div class="dr-badges">
+          <span class="dr-badge" id="drb1">🔴 High Confidence</span>
+          <span class="dr-badge" id="drb2">🔴 High Intensity</span>
+          <span class="dr-badge" id="drb3">🔴 High Congestion</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture Section -->
+<section class="section" id="architecture">
+  <div class="section-header">
+    <h2 class="section-title">System Architecture</h2>
+    <p class="section-desc">Complete pipeline of the AI-Based Adaptive DDoS Mitigation framework</p>
+  </div>
+
+  <div class="arch-diagram">
+    <div class="arch-flow">
+      <div class="arch-node source">
+        <div class="arch-icon">🌐</div>
+        <div class="arch-label">Internet Traffic</div>
+        <div class="arch-sublabel">Normal + DDoS Bots</div>
+      </div>
+      <div class="arch-arrow">
+        <div class="arch-arrow-line"></div>
+        <div class="arch-arrow-head">▶</div>
+      </div>
+      <div class="arch-node controller">
+        <div class="arch-icon">🖥️</div>
+        <div class="arch-label">Ryu Controller</div>
+        <div class="arch-sublabel">OpenFlow 1.3</div>
+      </div>
+      <div class="arch-arrow">
+        <div class="arch-arrow-line"></div>
+        <div class="arch-arrow-head">▶</div>
+      </div>
+      <div class="arch-node features">
+        <div class="arch-icon">📊</div>
+        <div class="arch-label">Feature Extraction</div>
+        <div class="arch-sublabel">Flow Telemetry · 21 Features</div>
+      </div>
+      <div class="arch-arrow">
+        <div class="arch-arrow-line"></div>
+        <div class="arch-arrow-head">▶</div>
+      </div>
+      <div class="arch-node ml">
+        <div class="arch-icon">🤖</div>
+        <div class="arch-label">Random Forest</div>
+        <div class="arch-sublabel">98.02% F1-Score</div>
+      </div>
+      <div class="arch-arrow">
+        <div class="arch-arrow-line"></div>
+        <div class="arch-arrow-head">▶</div>
+      </div>
+      <div class="arch-node adaptive highlight">
+        <div class="arch-icon">⚡</div>
+        <div class="arch-label">Adaptive Engine</div>
+        <div class="arch-sublabel">Rule + ML Selector</div>
+      </div>
+    </div>
+
+    <div class="arch-strategies">
+      <div class="strategy-node blocking">
+        <div class="s-icon">🚫</div>
+        <div class="s-name">Dynamic Blocking</div>
+        <div class="s-desc">OpenFlow DROP rule · High confidence + High intensity</div>
+        <div class="s-use">Attack Served: ~1%</div>
+      </div>
+      <div class="strategy-node ratelimit">
+        <div class="s-icon">🔧</div>
+        <div class="s-name">Rate Limiting</div>
+        <div class="s-desc">OpenFlow Meter · Low intensity + Low congestion</div>
+        <div class="s-use">Legit Loss: ~3%</div>
+      </div>
+      <div class="strategy-node migration">
+        <div class="s-icon">🔀</div>
+        <div class="s-name">Safe Inspection</div>
+        <div class="s-desc">Proxy Redirect · Medium flood + High congestion</div>
+        <div class="s-use">Balanced trade-off</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="nav-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <span>AI-Based Adaptive DDoS Mitigation in SDN</span>
+    </div>
+    <div class="footer-info">
+      <span>Built on: Python · Ryu · Mininet · Scikit-learn · OpenFlow 1.3</span>
+      <span>Branch: adaptive-ddos-mitigation</span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
